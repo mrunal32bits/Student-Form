@@ -1,0 +1,20 @@
+.form-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.flex { flex: 1 1 220px; }
+.gender-group { display:flex; gap:12px; margin-top:6px; }
+.subjects mat-checkbox { margin-right:8px; }
+.skills-field { width:100%; }
+.skills-list { margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
+.skill { background:#eee; padding:4px 8px; border-radius:12px; display:flex; align-items:center; gap:4px; }
+.actions { display:flex; gap:8px; margin-top:40px; }
+.skills-meta{margin-top: -20px;}

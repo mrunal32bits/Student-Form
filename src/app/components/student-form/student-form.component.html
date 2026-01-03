@@ -1,0 +1,102 @@
+<div class="form-card">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="row">
+      <mat-form-field appearance="outline" class="flex">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required maxlength="250" />
+        <mat-error *ngIf="form.get('name')?.hasError('required') && form.get('name')?.touched">Name is required</mat-error>
+        <mat-error *ngIf="form.get('name')?.hasError('maxlength') && form.get('name')?.touched">Maximum 250 characters</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="width:120px;">
+        <mat-label>Age</mat-label>
+        <input matInput type="number" formControlName="age" required min="1" max="100" (input)="onAgeInput($event)" />
+        <mat-error *ngIf="form.get('age')?.hasError('required') && form.get('age')?.touched">Age is required</mat-error>
+        <mat-error *ngIf="form.get('age')?.hasError('min') && form.get('age')?.touched">Enter valid age</mat-error>
+        <mat-error *ngIf="form.get('age')?.hasError('max') && form.get('age')?.touched">Age cannot exceed 100</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="flex">
+        <mat-label>Course</mat-label>
+        <mat-select formControlName="course" required>
+          <mat-option *ngFor="let c of courses" [value]="c">{{ c }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('course')?.hasError('required') && form.get('course')?.touched">Course is required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <div class="flex">
+        <label>Gender</label>
+        <mat-radio-group formControlName="gender" class="gender-group">
+          <mat-radio-button value="male">Male</mat-radio-button>
+          <mat-radio-button value="female">Female</mat-radio-button>
+          <mat-radio-button value="other">Other</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <mat-form-field appearance="outline" class="flex">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput formControlName="dob" [matDatepicker]="picker" />
+        <mat-hint>DD-MM-YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="form.get('dob')?.hasError('futureDate') && form.get('dob')?.touched">Date cannot be in the future</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="flex">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error *ngIf="form.get('email')?.hasError('email') && form.get('email')?.touched">Enter a valid email</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <div class="flex">
+        <label>Subjects</label>
+        <div class="subjects">
+          <mat-checkbox *ngFor="let s of subjectOptions" [checked]="(form.value.subjects||[]).includes(s)"
+            (change)="toggleSubject(s, $event.checked)">
+            {{ s }}
+          </mat-checkbox>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="row">
+      <div class="flex">
+        <label>Skills</label>
+        <mat-form-field appearance="outline" class="skills-field">
+          <mat-chip-grid #chipGrid aria-label="Skills input">
+            <mat-chip-row *ngFor="let skill of form.value.skills || []" removable="true" (removed)="removeSkill(skill)">
+              {{ skill }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip-row>
+
+            <input
+              matInput
+              [matChipInputFor]="chipGrid"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addSkill($event)"
+              placeholder="New skill..."
+              maxlength="50"
+              [disabled]="skillsCount >= 25 || skillsChars >= 500"
+            />
+          </mat-chip-grid>
+        </mat-form-field>
+        <div class="skills-meta">
+          <small>{{ skillsCount }} / 25 skills · {{ skillsChars }} / 500 chars</small>
+          <div class="error" *ngIf="skillsError">{{ skillsError }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit">{{ index!==null ? 'Update' : 'Submit' }}</button>
+      <button mat-stroked-button type="button" (click)="resetForm()">Reset</button>
+    </div>
+  </form>
+</div>
